@@ -6,12 +6,16 @@ int main()
     // constante
     const int FPS = 60;
     const float Velocity = 6.f;
+    const float jump = 320.f;
+    const float Gravity = 6.f;
 
     const int largeurWindow = 600;
     const int hauteurWindow = 800;
 
+    // variable
     float persoPosX = 300.f;
     float persoPosY = 760.f;
+    int jumpCounter = 0;
 
     // création de la fenêtre
     sf::RenderWindow window(sf::VideoMode(largeurWindow, hauteurWindow), "Sawblade PC", sf::Style::Close);
@@ -62,22 +66,33 @@ int main()
                 {
                     std::cout << "perso x = " << persoPosX << "perso y = " << persoPosY << std::endl;
                     persoPosX = persoPosX + Velocity;
-                    perso.setPosition(persoPosX, persoPosY);
+                    perso.move(persoPosX, persoPosY);
                 }
                 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
                 {
                     std::cout << "perso x = " << persoPosX << "perso y = " << persoPosY << std::endl;
                     persoPosX = persoPosX - Velocity;
-                    perso.setPosition(persoPosX, persoPosY);
+                    perso.move(persoPosX, persoPosY);
                 }
 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
                 {
-                    std::cout << "perso x = " << persoPosX << "perso y = " << persoPosY << std::endl;
+                    std::cout << "jump counter = " << jumpCounter << std::endl;
+                    if (jumpCounter < 2)
+                    {
+                        std::cout << "perso x = " << persoPosX << "perso y = " << persoPosY << std::endl;
+                        persoPosY = persoPosY - jump;
+                        perso.move(persoPosX, persoPosY);
+                        jumpCounter ++;
+                    }
                 }
             }
         }
+
+        // gravite
+        persoPosY = persoPosY + Gravity;
+        perso.setPosition(persoPosX, persoPosY);
 
         // bordure du jeu
         if (perso.getPosition().x < 25)
@@ -88,9 +103,10 @@ int main()
         {
             persoPosX = 575.f;
         }
-        if (perso.getPosition().y < 40)
+        if (perso.getPosition().y > 760)
         {
-            persoPosY = 575.f;
+            persoPosY = 760.f;
+            jumpCounter = 0;
         }
 
         // effacement de la fenêtre en noir
