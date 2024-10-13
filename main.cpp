@@ -12,7 +12,6 @@ int main()
 
     const int largeurWindow = 600;
     const int hauteurWindow = 800;
-
     // variable
     sf::Vector2f playerPosition(300, 760);
     int jumpCounter = 0;
@@ -23,7 +22,7 @@ int main()
     bool left = false;
 
     // création de la fenêtre
-    sf::RenderWindow window(sf::VideoMode(largeurWindow, hauteurWindow), "Sawblade PC", sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(largeurWindow, hauteurWindow), "Sawblade PC", sf::Style::Close | sf::Style::Titlebar);
     window.setFramerateLimit(FPS);
 
     // création des textures et des sprites
@@ -46,9 +45,22 @@ int main()
     sawSprite.setOrigin(188.5f, 188.5f);
 
     // création d'un personnage temporaire
-    sf::RectangleShape player(sf::Vector2f(50,80));
-    player.setOrigin(25.f, 40.f);
-    player.setFillColor(sf::Color(0, 179, 196));
+    sf::Texture playerTexture;
+    if (!playerTexture.loadFromFile("res/Img/Player.png")){
+
+    }
+
+    sf::Sprite player;
+
+    player.setTexture(playerTexture);
+
+    player.setScale(0.25f, 0.25f);
+    player.setOrigin(216/2, 244/2);
+
+
+    //sf::RectangleShape player(sf::Vector2f(50,80));
+    //player.setOrigin(25.f, 40.f);
+    //player.setFillColor(sf::Color(0, 179, 196));
     player.setPosition(playerPosition);
 
     sf::Clock clock;
@@ -152,7 +164,7 @@ int main()
         window.draw(bgSprite);
         window.draw(sawSprite);
         sawSprite.setPosition(300.f, 200.f);
-        sawSprite.rotate(15.f);
+        sawSprite.rotate(3.75f);
         window.draw(player);
 
 
