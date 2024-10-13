@@ -1,21 +1,26 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <ctime>
 
 int main()
 {
     // constante
-    const int FPS = 60;
-    const float Velocity = 6.f;
+    const int FPS = 240;
+    const float Velocity = 500.f;
     const float jump = 320.f;
-    const float Gravity = 6.f;
+    const float Gravity = 500.f;
 
     const int largeurWindow = 600;
     const int hauteurWindow = 800;
 
     // variable
-    float persoPosX = 300.f;
-    float persoPosY = 760.f;
+    sf::Vector2f playerPosition(300, 760);
     int jumpCounter = 0;
+
+    bool up = false;
+    bool down = false;
+    bool right = false;
+    bool left = false;
 
     // création de la fenêtre
     sf::RenderWindow window(sf::VideoMode(largeurWindow, hauteurWindow), "Sawblade PC", sf::Style::Close);
@@ -41,39 +46,58 @@ int main()
     sawSprite.setOrigin(188.5f, 188.5f);
 
     // création d'un personnage temporaire
-    sf::RectangleShape perso(sf::Vector2f(50,80));
-    perso.setOrigin(25.f, 40.f);
-    perso.setFillColor(sf::Color(0, 179, 196));
-    perso.setPosition(persoPosX, persoPosY);
+    sf::RectangleShape player(sf::Vector2f(50,80));
+    player.setOrigin(25.f, 40.f);
+    player.setFillColor(sf::Color(0, 179, 196));
+    player.setPosition(playerPosition);
 
+    sf::Clock clock;
 
     // on fait tourner le programme tant que la fenêtre n'a pas été fermée
     while (window.isOpen())
     {
+        // delta time
+        
+        sf::Time time = clock.restart();
+        clock.restart();     
+
+    // mouvement
+    //if (right) playerPosition.x = playerPosition.x + Velocity * time.asSeconds();
+    
+
         // on traite tous les évènements de la fenêtre qui ont été générés depuis la dernière itération de la boucle
         sf::Event event;
         while (window.pollEvent(event))
         {
+            
+            float frameVelocity = Velocity * time.asSeconds();
+
             // fermeture de la fenêtre lorsque l'utilisateur le souhaite
             if (event.type == sf::Event::Closed)
                 window.close();
 
             // lecture des touches pressées
+            if (event.type == sf::Event::KeyReleased)
+            {
+                if (sf::Keyboard::D) right = false;
+                if (sf::Keyboard::Q) left = false;
+            }
             if (event.type == sf::Event::KeyPressed)
             {
                 // deplacement du perso
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                 {
-                    std::cout << "perso x = " << persoPosX << "perso y = " << persoPosY << std::endl;
-                    persoPosX = persoPosX + Velocity;
-                    perso.move(persoPosX, persoPosY);
-                }
+                    right = true;
+                    //std::cout << "perso x = " << playerPosition.x << "perso y = " << playerPosition.y << std::endl;
+                    //playerPosition.x = playerPosition.x + Velocity * time.asSeconds();
+                } 
                 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
                 {
-                    std::cout << "perso x = " << persoPosX << "perso y = " << persoPosY << std::endl;
-                    persoPosX = persoPosX - Velocity;
-                    perso.move(persoPosX, persoPosY);
+                    left = true;
+                    //std::cout << "perso x = " << playerPosition.x << "perso y = " << playerPosition.y << std::endl;
+                    //playerPosition.x = playerPosition.x - Velocity * time.asSeconds();
+                    
                 }
 
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
@@ -81,36 +105,46 @@ int main()
                     std::cout << "jump counter = " << jumpCounter << std::endl;
                     if (jumpCounter < 2)
                     {
-                        std::cout << "perso x = " << persoPosX << "perso y = " << persoPosY << std::endl;
-                        persoPosY = persoPosY - jump;
-                        perso.move(persoPosX, persoPosY);
+                        std::cout << "perso x = " << playerPosition.x << "perso y = " << playerPosition.y << std::endl;
+                        playerPosition.y = playerPosition.y - jump;
+                        player.move(playerPosition.x, playerPosition.y);
                         jumpCounter ++;
                     }
                 }
             }
+
+            
         }
+
+        //mvmnt 
+        if (right) playerPosition.x = playerPosition.x + Velocity * time.asSeconds();
+        if (left) playerPosition.x = playerPosition.x - Velocity * time.asSeconds();
 
         // gravite
-        persoPosY = persoPosY + Gravity;
-        perso.setPosition(persoPosX, persoPosY);
+        playerPosition.y = playerPosition.y + Gravity * time.asSeconds();
+        player.setPosition(playerPosition.x, playerPosition.y);
 
         // bordure du jeu
-        if (perso.getPosition().x < 25)
+        if (player.getPosition().x < 25)
         {
-            persoPosX = 25.f;
+            playerPosition.x = 25.f;
         }
-        if (perso.getPosition().x > 575)
+        if (player.getPosition().x > 575)
         {
-            persoPosX = 575.f;
+            playerPosition.x = 575.f;
         }
-        if (perso.getPosition().y > 760)
+        if (player.getPosition().y > 760)
         {
-            persoPosY = 760.f;
+            playerPosition.y = 760.f;
             jumpCounter = 0;
         }
 
+        //std::cout << left << std::endl;
+
+
         // effacement de la fenêtre en noir
         window.clear(sf::Color::Black);
+
 
         // c'est ici qu'on dessine tout
         // window.draw(...);
@@ -119,9 +153,10 @@ int main()
         window.draw(sawSprite);
         sawSprite.setPosition(300.f, 200.f);
         sawSprite.rotate(15.f);
-        window.draw(perso);
+        window.draw(player);
 
 
+        
         // fin de la frame courante, affichage de tout ce qu'on a dessiné
         window.display();
     }
