@@ -44,7 +44,7 @@ int main()
     sawSprite.setScale(0.2f, 0.2f);
     sawSprite.setOrigin(188.5f, 188.5f);
 
-    // création d'un personnage temporaire
+    // création d'un personnage
     sf::Texture playerTexture;
     if (!playerTexture.loadFromFile("res/Img/Player.png")){
 
@@ -56,6 +56,22 @@ int main()
 
     player.setScale(0.25f, 0.25f);
     player.setOrigin(216/2, 244/2);
+
+    // création d'une platforme
+    sf::Texture platformTexture;
+    if (!platformTexture.loadFromFile("res/Img/Player.png")){
+
+    }
+
+    sf::Sprite platformSprite;
+
+    platformSprite.setTexture(playerTexture);
+
+    platformSprite.setScale(2.f, 2.f);
+    player.setOrigin(216/2, 244/2);
+
+
+
 
 
     //sf::RectangleShape player(sf::Vector2f(50,80));
@@ -160,6 +176,8 @@ int main()
 
         // c'est ici qu'on dessine tout
         // window.draw(...);
+
+        window.draw(platformSprite);
 
         window.draw(bgSprite);
         window.draw(sawSprite);
