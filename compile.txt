@@ -1,2 +1,2 @@
-1- g++ -c main.cpp -I"C:\Users\Thomas\Documents\libraries\SFML\include"
-2- g++ main.o -o main -L"C:\Users\Thomas\Documents\libraries\SFML\lib" -lsfml-graphics -lsfml-window -lsfml-system
+1- g++ -c main.cpp -I"SFML\include"
+2- g++ main.o -o main -L"SFML\lib" -lsfml-graphics -lsfml-window -lsfml-system

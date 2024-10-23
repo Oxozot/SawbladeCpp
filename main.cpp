@@ -59,16 +59,17 @@ int main()
 
     // création d'une platforme
     sf::Texture platformTexture;
-    if (!platformTexture.loadFromFile("res/Img/Player.png")){
+    if (!platformTexture.loadFromFile("res/Img/test.png")){
 
     }
 
     sf::Sprite platformSprite;
 
-    platformSprite.setTexture(playerTexture);
+    platformSprite.setTexture(platformTexture);
 
-    platformSprite.setScale(2.f, 2.f);
-    player.setOrigin(216/2, 244/2);
+    platformSprite.setScale(4.f, 4.f);
+    platformSprite.setOrigin(8.f, 8.f);
+    platformSprite.setPosition(300.f, 600.f);
 
 
 
@@ -177,10 +178,11 @@ int main()
         // c'est ici qu'on dessine tout
         // window.draw(...);
 
-        window.draw(platformSprite);
+        
 
         window.draw(bgSprite);
         window.draw(sawSprite);
+        window.draw(platformSprite);
         sawSprite.setPosition(300.f, 200.f);
         sawSprite.rotate(3.75f);
         window.draw(player);
